@@ -77,6 +77,15 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+          body: |
+            ### 📦 下载指南 / Download Guide
+
+            | 文件名 | 类型 | 说明与建议 |
+            | :--- | :--- | :--- |
+            | **`WindowDecoy-${{ steps.get_version.outputs.VERSION }}-win-x64-Standalone.zip`** | **独立运行版（推荐）** | **开箱即用，无需安装任何环境**。内置完整 .NET 10 运行时，解压后双击即可运行。适合绝大多数用户。 |
+            | **`WindowDecoy-${{ steps.get_version.outputs.VERSION }}-win-x64-Dependent.zip`** | **依赖运行库版** | **体积极小**。需要目标电脑已安装 [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/)，否则会报错提示缺少环境。 |
+
+            ---
           files: |
             ./dist/*.zip
         env:

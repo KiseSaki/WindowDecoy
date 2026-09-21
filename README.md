@@ -151,11 +151,14 @@ Win伪装/
 2. **通过 GitHub Actions 界面手动触发**：
    在 GitHub 仓库的 **Actions** -> **Build and Release** 页面中，点击 **Run workflow** 并输入版本号（如 `v1.0.0`）即可一键打包发布。
 
-### 自动化构建产物
+### 自动化构建产物说明
 
 每次发布将自动生成两种规格的压缩包供用户下载：
-- **`WindowDecoy-vX.X.X-win-x64-Standalone.zip`**：独立运行版（Self-Contained 单文件封装，无需用户事先安装 .NET 10 Runtime）。
-- **`WindowDecoy-vX.X.X-win-x64-Dependent.zip`**：轻量便携版（体积小，需目标机器已安装 .NET 10 运行库）。
+
+| 压缩包文件 | 类型 | 说明与下载建议 |
+| :--- | :--- | :--- |
+| **`WindowDecoy-vX.X.X-win-x64-Standalone.zip`** | **独立运行版（推荐）** | **开箱即用，无需安装任何环境**。已内置完整 .NET 10 运行库并进行单文件封装，解压即可直接双击运行，适合绝大多数用户。 |
+| **`WindowDecoy-vX.X.X-win-x64-Dependent.zip`** | **依赖运行库版** | **体积极小**。仅包含程序自身代码，需要目标机器已预先安装 [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/)，否则无法启动。 |
 
 ---
 
