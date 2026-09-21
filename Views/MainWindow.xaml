@@ -1,0 +1,593 @@
+<Window x:Class="WindowDecoy.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:WindowDecoy.Converters"
+        mc:Ignorable="d"
+        Title="WindowDecoy - Windows 11 隐形替身伪装工具"
+        Icon="/Assets/app.ico"
+        Height="760" Width="1060"
+        MinHeight="680" MinWidth="960"
+        WindowStartupLocation="CenterScreen"
+        Background="#F3F3F3"
+        FontFamily="Segoe UI, Microsoft YaHei UI">
+
+    <Window.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBool" />
+        <converters:NullToVisibilityConverter x:Key="NullToVis" />
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <!-- Card Style -->
+        <Style x:Key="CardBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#E5E7EB" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Margin" Value="0,0,0,16" />
+        </Style>
+
+        <!-- Standard Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#D1D5DB" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F9FAFB" />
+                    <Setter Property="BorderBrush" Value="#9CA3AF" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Primary Accent Button Style -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#0067C0" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005DA6" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Success Green Button Style -->
+        <Style x:Key="SuccessButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#16A34A" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#15803D" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Warning Amber Button Style -->
+        <Style x:Key="WarningButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#D97706" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#B45309" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Danger Button Style -->
+        <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#DC2626" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#B91C1C" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <!-- Header Bar -->
+            <RowDefinition Height="Auto" />
+            <!-- Main Content (Two Columns) -->
+            <RowDefinition Height="*" />
+            <!-- Footer Status Bar -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Top Header Bar -->
+        <Border Grid.Row="0" Background="#FFFFFF" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🛡️" FontSize="24" Margin="0,0,10,0" VerticalAlignment="Center" />
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="WindowDecoy" FontSize="18" FontWeight="Bold" Foreground="#111827" />
+                        <TextBlock Text="Windows 11 纯用户态程序替身伪装工具" FontSize="12" Foreground="#6B7280" Margin="0,2,0,0" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource DangerButtonStyle}"
+                            Command="{Binding RestartAsAdminCommand}"
+                            Visibility="{Binding IsNotElevated, Converter={StaticResource BoolToVis}}"
+                            Padding="10,6"
+                            Margin="0,0,8,0"
+                            ToolTip="如果需要伪装以管理员权限运行的游戏或辅助工具，请点击以此身份重启">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🛡️ 以管理员身份重启" FontSize="12" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding ActivateAllCommand}"
+                            Padding="14,7"
+                            Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚡ 一键全伪装 (" />
+                            <TextBlock Text="{Binding MasterActivateHotkey}" />
+                            <TextBlock Text=")" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource WarningButtonStyle}"
+                            Command="{Binding RestoreAllCommand}"
+                            Padding="14,7"
+                            Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔄 一键全恢复 (" />
+                            <TextBlock Text="{Binding MasterRestoreHotkey}" />
+                            <TextBlock Text=")" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding MinimizeToTrayCommand}"
+                            Padding="12,7"
+                            ToolTip="隐藏窗口到右下角系统托盘并在后台守护">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗕 后台挂起" FontSize="12" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Two-Column Body -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <!-- Left: Targets List -->
+                <ColumnDefinition Width="340" />
+                <ColumnDefinition Width="16" />
+                <!-- Right: Configuration Details -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel: Tasks List -->
+            <Border Grid.Column="0" Background="#FFFFFF" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="📋 伪装任务列表" FontWeight="Bold" FontSize="14" Foreground="#1F2937" VerticalAlignment="Center" />
+                        <Button Grid.Column="1"
+                                Content="➕ 新增任务"
+                                Command="{Binding AddSessionCommand}"
+                                Padding="10,4"
+                                FontSize="12" />
+                    </Grid>
+
+                    <ListBox Grid.Row="1"
+                             ItemsSource="{Binding Sessions}"
+                             SelectedItem="{Binding SelectedSession, Mode=TwoWay}"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0,0,0,6" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="ItemBorder"
+                                                    Background="#FAFAFA"
+                                                    BorderBrush="#E5E7EB"
+                                                    BorderThickness="1"
+                                                    CornerRadius="6"
+                                                    Padding="10,8">
+                                                <ContentPresenter />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="#EFF6FF" />
+                                                    <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#3B82F6" />
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#60A5FA" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Status Dot Indicator -->
+                                    <Ellipse Grid.Column="0"
+                                             Width="10" Height="10"
+                                             Fill="{Binding StatusColor}"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,10,0" />
+
+                                    <!-- Target & Profile Info -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Profile.Name}" FontWeight="SemiBold" FontSize="13" Foreground="#111827" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Foreground="#6B7280" FontSize="11" Margin="0,2,0,0" TextTrimming="CharacterEllipsis">
+                                            <Run Text="{Binding TargetProcessName, TargetNullValue='未选择目标'}" />
+                                            <Run Text=" (PID: " />
+                                            <Run Text="{Binding TargetProcessId}" />
+                                            <Run Text=")" />
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}" FontSize="11" FontWeight="Medium" Margin="0,2,0,0" />
+                                    </StackPanel>
+
+                                    <!-- Action Indicator -->
+                                    <TextBlock Grid.Column="2"
+                                               Text="▶"
+                                               FontSize="12"
+                                               Foreground="#9CA3AF"
+                                               VerticalAlignment="Center"
+                                               Margin="6,0,0,0" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- Right Panel: Target Configuration -->
+            <Border Grid.Column="2" Background="#FFFFFF" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="18">
+                <Grid>
+                    <!-- Display when NO session is selected -->
+                    <TextBlock Text="👈 请从左侧选择或新增一个伪装任务"
+                               FontSize="15"
+                               Foreground="#9CA3AF"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasSelectedSession}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <!-- Display when session is selected -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer.Style>
+                            <Style TargetType="ScrollViewer">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasSelectedSession}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ScrollViewer.Style>
+
+                        <StackPanel>
+                            <!-- Section 1: Target Binding -->
+                            <Border Style="{StaticResource CardBorderStyle}">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="🎯 1. 目标程序绑定" FontWeight="Bold" FontSize="14" Foreground="#111827" VerticalAlignment="Center" />
+                                        <Button Grid.Column="1"
+                                                Content="🔍 挑选窗口 / 进程"
+                                                Style="{StaticResource PrimaryButtonStyle}"
+                                                Command="{Binding PickProcessCommand}"
+                                                Padding="12,5" />
+                                    </Grid>
+
+                                    <Border Background="#F9FAFB" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" Padding="12">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Image Grid.Column="0" Source="{Binding SelectedSession.TargetIcon}" Width="32" Height="32" Margin="0,0,12,0" VerticalAlignment="Center" />
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock FontWeight="SemiBold" FontSize="13" Foreground="#1F2937">
+                                                    <Run Text="目标进程: " />
+                                                    <Run Text="{Binding SelectedSession.TargetProcessName, TargetNullValue='尚未选择'}" />
+                                                    <Run Text=" (PID: " />
+                                                    <Run Text="{Binding SelectedSession.TargetProcessId}" />
+                                                    <Run Text=")" />
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding SelectedSession.TargetTitle, TargetNullValue='尚未选择窗口'}"
+                                                           FontSize="12" Foreground="#4B5563" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Section 2: Decoy Appearance -->
+                            <Border Style="{StaticResource CardBorderStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="🎭 2. 替身外观设置" FontWeight="Bold" FontSize="14" Foreground="#111827" Margin="0,0,0,12" />
+
+                                    <!-- Fake Title -->
+                                    <TextBlock Text="假窗口标题 (Fake Window Title):" FontSize="12" Foreground="#374151" Margin="0,0,0,4" />
+                                    <TextBox Text="{Binding SelectedSession.Profile.FakeTitle, UpdateSourceTrigger=PropertyChanged}"
+                                             Height="32" Padding="8,5" FontSize="13" Margin="0,0,0,12" />
+
+                                    <!-- Fake Icon -->
+                                    <TextBlock Text="假窗口图标 (Fake Icon - 支持 .ico / .exe / .dll):" FontSize="12" Foreground="#374151" Margin="0,0,0,4" />
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0"
+                                                 Text="{Binding SelectedSession.Profile.FakeIconPath, UpdateSourceTrigger=PropertyChanged}"
+                                                 Height="32" Padding="8,5" FontSize="13" />
+                                        <Button Grid.Column="1"
+                                                Content="浏览..."
+                                                Command="{Binding BrowseIconCommand}"
+                                                Margin="8,0,8,0"
+                                                Height="32" />
+                                        <Border Grid.Column="2" Width="32" Height="32" Background="#F3F4F6" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="4">
+                                            <Image Source="{Binding FakeIconPreview}" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Fake Screenshot -->
+                                    <TextBlock Text="假工作界面截图 (Fake Screenshot - 用于 Decoy 窗口主体展示):" FontSize="12" Foreground="#374151" Margin="0,0,0,4" />
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0"
+                                                 Text="{Binding SelectedSession.Profile.FakeScreenshotPath, UpdateSourceTrigger=PropertyChanged}"
+                                                 Height="32" Padding="8,5" FontSize="13" />
+                                        <Button Grid.Column="1"
+                                                Content="浏览..."
+                                                Command="{Binding BrowseScreenshotCommand}"
+                                                Margin="8,0,0,0"
+                                                Height="32" />
+                                    </Grid>
+
+                                    <!-- Screenshot Preview Card -->
+                                    <Border Height="140" Background="#1E1E1E" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="6">
+                                        <Grid>
+                                            <TextBlock Text="暂未选择截图，替身窗口主体将以纯深色背景显示"
+                                                       Foreground="#9CA3AF"
+                                                       FontSize="12"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding FakeScreenshotPreview}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <Image Source="{Binding FakeScreenshotPreview}" Stretch="Uniform" Margin="4" />
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Section 3: Window Size & Position -->
+                            <Border Style="{StaticResource CardBorderStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="📐 3. 窗口尺寸与定位" FontWeight="Bold" FontSize="14" Foreground="#111827" Margin="0,0,0,10" />
+
+                                    <TextBlock Text="窗口尺寸模式:" FontSize="12" Foreground="#374151" Margin="0,0,0,4" />
+                                    <WrapPanel Margin="0,0,0,10">
+                                        <RadioButton Content="使用目标窗口原始尺寸"
+                                                     IsChecked="{Binding SelectedSession.Profile.SizeMode, Converter={StaticResource EnumToBool}, ConverterParameter=TargetWindow}"
+                                                     Margin="0,0,16,0" VerticalAlignment="Center" />
+                                        <RadioButton Content="使用截图原始尺寸"
+                                                     IsChecked="{Binding SelectedSession.Profile.SizeMode, Converter={StaticResource EnumToBool}, ConverterParameter=ScreenshotSize}"
+                                                     Margin="0,0,16,0" VerticalAlignment="Center" />
+                                        <RadioButton Content="自定义尺寸 (1280x720)"
+                                                     IsChecked="{Binding SelectedSession.Profile.SizeMode, Converter={StaticResource EnumToBool}, ConverterParameter=Custom}"
+                                                     VerticalAlignment="Center" />
+                                    </WrapPanel>
+
+                                    <TextBlock Text="窗口位置模式:" FontSize="12" Foreground="#374151" Margin="0,0,0,4" />
+                                    <WrapPanel Margin="0,0,0,4">
+                                        <RadioButton Content="使用目标窗口原屏幕位置 (推荐)"
+                                                     IsChecked="{Binding SelectedSession.Profile.PositionMode, Converter={StaticResource EnumToBool}, ConverterParameter=TargetWindow}"
+                                                     Margin="0,0,16,0" VerticalAlignment="Center" />
+                                        <RadioButton Content="所在显示器居中"
+                                                     IsChecked="{Binding SelectedSession.Profile.PositionMode, Converter={StaticResource EnumToBool}, ConverterParameter=ScreenCenter}"
+                                                     Margin="0,0,16,0" VerticalAlignment="Center" />
+                                        <RadioButton Content="自定义坐标"
+                                                     IsChecked="{Binding SelectedSession.Profile.PositionMode, Converter={StaticResource EnumToBool}, ConverterParameter=Custom}"
+                                                     VerticalAlignment="Center" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Section 4: Behavior Mode & Hotkeys -->
+                            <Border Style="{StaticResource CardBorderStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="⚡ 4. 行为模式与自动伪装" FontWeight="Bold" FontSize="14" Foreground="#111827" Margin="0,0,0,10" />
+
+                                    <TextBlock Text="替身唤醒与交互模式:" FontSize="12" FontWeight="SemiBold" Foreground="#374151" Margin="0,0,0,6" />
+                                    <StackPanel Margin="0,0,0,10">
+                                        <RadioButton IsChecked="{Binding SelectedSession.Profile.BehaviorMode, Converter={StaticResource EnumToBool}, ConverterParameter=Proxy}"
+                                                     Margin="0,0,0,8" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="🟢 代理直通模式 (推荐)" FontWeight="Bold" Foreground="#15803D" />
+                                                <TextBlock Text=" — Alt+Tab 切换到替身或点击替身窗口时，立即瞬间唤回原游戏/程序" Foreground="#4B5563" Margin="6,0,0,0" />
+                                            </StackPanel>
+                                        </RadioButton>
+                                        <RadioButton IsChecked="{Binding SelectedSession.Profile.BehaviorMode, Converter={StaticResource EnumToBool}, ConverterParameter=Safe}"
+                                                     Margin="0,0,0,4" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="🛡️ 防窥安全模式" FontWeight="Bold" Foreground="#B45309" />
+                                                <TextBlock Text=" — 切换到替身仅展示假截图(防旁人偷看)，需按恢复快捷键或双击窗口才切回游戏" Foreground="#4B5563" Margin="6,0,0,0" />
+                                            </StackPanel>
+                                        </RadioButton>
+                                    </StackPanel>
+
+                                    <!-- Auto Re-disguise Checkbox -->
+                                    <Border Background="#F9FAFB" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" Padding="10,8" Margin="0,0,0,12">
+                                        <CheckBox IsChecked="{Binding SelectedSession.Profile.AutoDisguiseOnLostFocus}"
+                                                  VerticalContentAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="🔄 原程序失去焦点时自动切回替身" FontWeight="SemiBold" Foreground="#1F2937" FontSize="12" />
+                                                <TextBlock Text=" (切到其他窗口、桌面或最小化时，自动重新隐形原游戏并展示替身)" Foreground="#6B7280" FontSize="11" Margin="6,0,0,0" />
+                                            </StackPanel>
+                                        </CheckBox>
+                                    </Border>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="16" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="独立伪装热键 (可选):" FontSize="12" Foreground="#374151" Margin="0,0,0,4" />
+                                            <TextBox Text="{Binding SelectedSession.Profile.Hotkey, UpdateSourceTrigger=PropertyChanged}"
+                                                     Height="30" Padding="6,4" FontSize="12" />
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="独立恢复热键 (可选):" FontSize="12" Foreground="#374151" Margin="0,0,0,4" />
+                                            <TextBox Text="{Binding SelectedSession.Profile.RestoreHotkey, UpdateSourceTrigger=PropertyChanged}"
+                                                     Height="30" Padding="6,4" FontSize="12" />
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Bottom Action Control Bar for Selected Task -->
+                            <Border Background="#F9FAFB" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,0,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button Grid.Column="0"
+                                            Content="🗑 删除任务"
+                                            Style="{StaticResource DangerButtonStyle}"
+                                            Command="{Binding RemoveSessionCommand}"
+                                            Padding="14,6" />
+
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <Button Content="▶ 启用当前伪装"
+                                                Style="{StaticResource SuccessButtonStyle}"
+                                                Command="{Binding ActivateSelectedCommand}"
+                                                Padding="20,7"
+                                                Margin="0,0,10,0" />
+                                        <Button Content="⏹ 恢复当前程序"
+                                                Style="{StaticResource WarningButtonStyle}"
+                                                Command="{Binding RestoreSelectedCommand}"
+                                                Padding="20,7" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Bottom Global Status Bar -->
+        <Border Grid.Row="2" Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Column="0"
+                          Content="点击窗口关闭 [X] 时最小化到系统托盘 (后台静默挂起)"
+                          IsChecked="{Binding MinimizeToTrayOnClose, Mode=TwoWay}"
+                          FontSize="12"
+                          Foreground="#374151"
+                          VerticalAlignment="Center"
+                          Margin="0,0,16,0"
+                          ToolTip="类似 QQ 模式：点击右上角关闭按钮不会退出程序，而是最小化到右下角托盘，双击托盘图标可重新打开主界面。" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{Binding StatusSummary}"
+                           FontSize="12"
+                           Foreground="#6B7280"
+                           VerticalAlignment="Center" />
+
+                <TextBlock Grid.Column="2"
+                           Text="💡 提示：双击托盘图标可随时唤出主界面 | 右键托盘可一键全恢复或彻底退出"
+                           FontSize="11"
+                           Foreground="#9CA3AF"
+                           VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+

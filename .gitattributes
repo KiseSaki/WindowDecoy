@@ -1,0 +1,24 @@
+# Auto detect text files and perform LF/CRLF normalization
+* text=auto
+
+# C# and XAML files
+*.cs text diff=csharp
+*.xaml text
+*.csproj text
+*.sln text eol=crlf
+*.manifest text
+
+# Markdown & documentation
+*.md text
+*.txt text
+*.json text
+
+# Binary files
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.dll binary
+*.exe binary
+*.pdb binary
