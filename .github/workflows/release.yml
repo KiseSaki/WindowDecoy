@@ -1,0 +1,84 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: '发布版本号 Tag (例如 v1.0.0)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 安装 .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: 确定版本号
+        id: get_version
+        shell: pwsh
+        run: |
+          $ver = "${{ github.event.inputs.tag_name }}"
+          if ([string]::IsNullOrWhiteSpace($ver)) {
+              $ver = "${{ github.ref_name }}"
+          }
+          if ([string]::IsNullOrWhiteSpace($ver) -or $ver -eq "master" -or $ver -eq "main") {
+              $ver = "v" + (Get-Date -Format "yyyy.MM.dd.HHmm")
+          }
+          Write-Output "VERSION=$ver" >> $env:GITHUB_OUTPUT
+          Write-Output "Target Version: $ver"
+
+      - name: 恢复依赖
+        run: dotnet restore WindowDecoy.csproj
+
+      - name: 打包独立运行版 (Self-Contained 单文件免安装)
+        run: |
+          dotnet publish WindowDecoy.csproj -c Release -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -o ./publish/standalone
+
+      - name: 打包依赖运行库版 (Framework-Dependent 轻量版)
+        run: |
+          dotnet publish WindowDecoy.csproj -c Release -r win-x64 `
+            --self-contained false `
+            -o ./publish/framework-dependent
+
+      - name: 压缩打包产物
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.get_version.outputs.VERSION }}"
+          New-Item -ItemType Directory -Force -Path ./dist
+          Compress-Archive -Path ./publish/standalone/* -DestinationPath "./dist/WindowDecoy-${ver}-win-x64-Standalone.zip"
+          Compress-Archive -Path ./publish/framework-dependent/* -DestinationPath "./dist/WindowDecoy-${ver}-win-x64-Dependent.zip"
+
+      - name: 发布 GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          name: "WindowDecoy ${{ steps.get_version.outputs.VERSION }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ./dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

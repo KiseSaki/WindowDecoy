@@ -122,6 +122,31 @@ Win伪装/
 
 ---
 
+## 📦 自动打包发布 (CI/CD)
+
+项目已配置 GitHub Actions 自动化工作流（[.github/workflows/release.yml](.github/workflows/release.yml)）。
+
+### 发布新版本流程
+
+1. **通过 Git Tag 触发（推荐）**：
+   打上版本 Tag 并推送到远程仓库：
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+   工作流将自动触发，完成编译、测试并发布对应的 GitHub Release。
+
+2. **通过 GitHub Actions 界面手动触发**：
+   在 GitHub 仓库的 **Actions** -> **Build and Release** 页面中，点击 **Run workflow** 并输入版本号（如 `v1.0.0`）即可一键打包发布。
+
+### 自动化构建产物
+
+每次发布将自动生成两种规格的压缩包供用户下载：
+- **`WindowDecoy-vX.X.X-win-x64-Standalone.zip`**：独立运行版（Self-Contained 单文件封装，无需用户事先安装 .NET 10 Runtime）。
+- **`WindowDecoy-vX.X.X-win-x64-Dependent.zip`**：轻量便携版（体积小，需目标机器已安装 .NET 10 运行库）。
+
+---
+
 ## 📄 开源许可证
 
 本项目采用 [MIT License](LICENSE) 授权开源。
